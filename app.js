@@ -11,4 +11,4 @@ console.log (resultadomultiplicar);
 
         
 let resultadodividir= calculadora.dividir (1,2);
-console.log (resultadodividir);
+console.log (resultadodividir); 
