@@ -17,7 +17,7 @@ const biblioteca = {
     mostrarLivros(){
         for(let i=0; i<this.livros.length; i++){
             const L = this.livros[i];
-            console.log(L.nome + " - " + L.autor + " - " + L.ano);
+            console.log("Lista dos livros da biblioteca:"+L.nome + " - " + L.autor + " - " + L.ano);
         }
     },
 
@@ -35,16 +35,17 @@ const biblioteca = {
                     L.vezesAlugado++;
                     console.log("O Livro " + L.nome + " foi alugado com sucesso!");
                 } else {
-                    console.log("Livro já alugado!");
+                    console.log("O Livro " + L.nome + " já foi alugado!");
                 }
                 break; // Para o loop se já achou o livro
+            }
+            if (!livroEncontrado) {
+                console.log("O Livro " + L.nome + " não foi encontrado!");
             }
         }
 
         // Se rodou o array inteiro e não achou
-        if (!livroEncontrado) {
-            console.log("Livro não encontrado!");
-        }
+       
     },
 
     devolver(nome){
@@ -68,7 +69,23 @@ const biblioteca = {
         if (!livroEncontrado) {
             console.log("Livro não encontrado!");
         }
-    }
+    },
+
+
+    remover(nome){
+        for(let i=0; i<this.livros.length; i++){
+            const L = this.livros[i];
+            if (L.nome.toLowerCase() === nome.toLowerCase()) {
+                this.livros.splice(i, 1);
+                console.log("O Livro " + L.nome + " foi removido com sucesso!");
+                return;
+            }else{
+                console.log("Livro não encontrado!");
+            }
+        }
+    },
+
+    
 };
 
 // Cadastro correto: Nome, Autor, Ano
@@ -83,3 +100,8 @@ console.log("\n--- Testando Aluguel ---");
 biblioteca.alugar("Cinderela"); // Sucesso
 biblioteca.alugar("Cinderela"); // Já alugado
 biblioteca.alugar("Harry Potter"); // Não encontrado
+
+biblioteca.devolver("Cinderela"); // Sucesso
+
+biblioteca.remover("Cinderela");
+biblioteca.mostrarLivros();
