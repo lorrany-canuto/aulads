@@ -85,7 +85,19 @@ const biblioteca = {
         }
     },
 
-    
+   
+    buscar(nome){
+        for(let i=0;i<this.livros.length;i++){
+            const L = this.livros[i];
+            if(L.nome.toLowerCase() === nome.toLowerCase()){
+                console.log("O Livro " + L.nome + " foi encontrado!");
+                return;
+            }
+        }
+        console.log("Livro não encontrado!" );
+        return null
+    }
+
 };
 
 // Cadastro correto: Nome, Autor, Ano
@@ -105,3 +117,6 @@ biblioteca.devolver("Cinderela"); // Sucesso
 
 biblioteca.remover("Cinderela");
 biblioteca.mostrarLivros();
+biblioteca.buscar("Cinderela");
+biblioteca.buscar("Peter Pan");
+biblioteca.buscar("Harry Potter");
