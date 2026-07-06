@@ -1,122 +1,139 @@
-const biblioteca = {
+// ============================================
+// BIBLIOTECA - LÓGICA PRINCIPAL
+// ============================================
+// ALUNOS: Complete as funções marcadas com TODO
+// ============================================
+export const biblioteca = {
     livros: [],
 
-    adicionarLivros(nome, autor, ano) {
+    // ==========================================
+    // 1. ADICIONAR LIVRO (JÁ PRONTO)
+    // ==========================================
+    adicionarLivros(nome, autor, categoria, estoque) {
         const livro = {
-            nome,
-            autor,
-            ano,
+            nome: nome,
+            autor: autor,
+            categoria: categoria,
+            estoque: estoque,
             disponivel: true,
             alugado: false,
             vezesAlugado: 0
         };
 
         this.livros.push(livro);
+        console.log("Livro adicionado:", livro.nome);
+        return true;
     },
 
-    mostrarLivros(){
-        for(let i=0; i<this.livros.length; i++){
-            const L = this.livros[i];
-            console.log("Lista dos livros da biblioteca:"+L.nome + " - " + L.autor + " - " + L.ano);
+    // ==========================================
+    // 2. MOSTRAR LIVROS (JÁ PRONTO)
+    // ==========================================
+    mostrarLivros() {
+        for (let i = 0; i < this.livros.length; i++) {
+            const p = this.livros[i];
+            console.log(`${p.nome} - ${p.autor}`);
+            return true;
         }
     },
 
-    alugar(nome){
-        // Criamos uma variável para controlar se achamos o livro
-        let livroEncontrado = false;
+    // ==========================================
+    // 3. ALUGAR LIVRO (JÁ PRONTO)
+    // ==========================================
+    alugar(nome) {
+        for (let i = 0; i < this.livros.length; i++) {
+            const p = this.livros[i];
 
-        for(let i=0; i<this.livros.length; i++){
-            const L = this.livros[i];
-            if(L.nome === nome){
-                livroEncontrado = true; // Achou!
-                if(L.disponivel){
-                    L.disponivel = false;
-                    L.alugado = true;
-                    L.vezesAlugado++;
-                    console.log("O Livro " + L.nome + " foi alugado com sucesso!");
+            if (p.nome.toLowerCase() === nome.toLowerCase()) { // Atualizado para ignorar maiúsculas/minúsculas
+                if (p.disponivel && p.estoque > 0) {
+                    p.disponivel = false;
+                    p.alugado = true;
+                    p.vezesAlugado++;
+                    p.estoque--;
+
+                    console.log(nome + " alugado com sucesso");
+                    return true; // Sucesso! Retorna true para o app.js atualizar a tela
+                } else if (p.estoque <= 0) {
+                    console.log("O livro " + nome + " está sem estoque!");
                 } else {
-                    console.log("O Livro " + L.nome + " já foi alugado!");
+                    console.log("O livro " + nome + " já está alugado!");
                 }
-                break; // Para o loop se já achou o livro
-            }
-            if (!livroEncontrado) {
-                console.log("O Livro " + L.nome + " não foi encontrado!");
+
+                return false; // Encontrou o livro, mas não pôde alugar
             }
         }
 
-        // Se rodou o array inteiro e não achou
-       
+        console.log("O livro " + nome + " não existe.");
+        return false; // Não encontrou o livro
     },
 
-    devolver(nome){
-        let livroEncontrado = false;
-
-        for(let i=0; i<this.livros.length; i++){
-            const L = this.livros[i];
-            if(L.nome === nome){
-                livroEncontrado = true;
-                if(L.alugado){
-                    L.disponivel = true;
-                    L.alugado = false;
-                    console.log("O Livro " + L.nome + " foi devolvido com sucesso!");
+    // ==========================================
+    // 4. DEVOLVER LIVRO (JÁ PRONTO)
+    // ==========================================
+    devolver(nome) {
+        for (let i = 0; i < this.livros.length; i++) {
+            const p = this.livros[i];
+            if (p.nome.toLowerCase() === nome.toLowerCase()) { // Atualizado para ignorar maiúsculas/minúsculas
+                if (p.disponivel == false) {
+                    p.disponivel = true;
+                    p.alugado = false;
+                    p.estoque++; // CORRIGIDO: Agora aumenta +1 no estoque ao invés de fixar em 1
+                    console.log("Livro", nome, "devolvido com sucesso!");
+                    return true; // Sucesso! Retorna true para o app.js saber que deu certo
                 } else {
-                    console.log("Livro não estava alugado!");
+                    console.log("O", nome, "ja esta disponivel!")
+                    return false;
                 }
-                break;
             }
         }
-
-        if (!livroEncontrado) {
-            console.log("Livro não encontrado!");
-        }
+        console.log("O", nome, "Nao foi encontrado!!")
+        return false; // CORRIGIDO: Retorna false se o livro não existir
     },
 
-
-    remover(nome){
-        for(let i=0; i<this.livros.length; i++){
-            const L = this.livros[i];
-            if (L.nome.toLowerCase() === nome.toLowerCase()) {
+    // ==========================================
+    // 5. REMOVER LIVRO (JÁ PRONTO)
+    // ==========================================
+    removerLivro(nome) {
+        for (let i = 0; i < this.livros.length; i++) {
+            if (this.livros[i].nome.toLowerCase() === nome.toLowerCase()) {
+                const removido = this.livros[i];
                 this.livros.splice(i, 1);
-                console.log("O Livro " + L.nome + " foi removido com sucesso!");
-                return;
-            }else{
-                console.log("Livro não encontrado!");
+                console.log("Livro removido", removido.nome);
+                return true; // Sucesso! Retorna true para o app.js saber que deu certo
             }
         }
+        console.log("Produto não encontrado");
+        return false; // CORRIGIDO: Retorna false para o app.js avisar que não achou
     },
 
-   
-    buscar(nome){
-        for(let i=0;i<this.livros.length;i++){
-            const L = this.livros[i];
-            if(L.nome.toLowerCase() === nome.toLowerCase()){
-                console.log("O Livro " + L.nome + " foi encontrado!");
-                return;
+    // ==========================================
+    // 6. BUSCAR LIVRO (JÁ PRONTO)
+    // ==========================================
+    buscarLivro(nome) {
+        for (let i = 0; i < this.livros.length; i++) {
+            const p = this.livros[i]
+            if (p.nome.toLowerCase() === nome.toLowerCase()) {
+                console.log("Nome: " + p.nome);
+                console.log("Estoque: " + p.estoque)
+                return p;
             }
         }
-        console.log("Livro não encontrado!" );
+        console.log("Livro não encontrado");
         return null
+    },
+
+    // ==========================================
+    // 7. LIVROS DISPONÍVEIS (TODO - ALUNOS COMPLETAM)
+    // ==========================================
+    livrosDisponiveis() {
+        // TODO: Implementar a função
+        return [];
+    },
+
+    // ==========================================
+    // 8. ESTATÍSTICAS (TODO - ALUNOS COMPLETAM)
+    // ==========================================
+    estatisticas() {
+        // TODO: Implementar a função
+        return null;
     }
-
 };
-
-// Cadastro correto: Nome, Autor, Ano
-biblioteca.adicionarLivros("Cinderela", "Irmãos Grimm", 1812);
-biblioteca.adicionarLivros("Peter Pan", "J. M. Barrie", 1911);
-
-// Testando o sistema
-console.log("--- Lista de Livros ---");
-biblioteca.mostrarLivros();
-
-console.log("\n--- Testando Aluguel ---");
-biblioteca.alugar("Cinderela"); // Sucesso
-biblioteca.alugar("Cinderela"); // Já alugado
-biblioteca.alugar("Harry Potter"); // Não encontrado
-
-biblioteca.devolver("Cinderela"); // Sucesso
-
-biblioteca.remover("Cinderela");
-biblioteca.mostrarLivros();
-biblioteca.buscar("Cinderela");
-biblioteca.buscar("Peter Pan");
-biblioteca.buscar("Harry Potter");
